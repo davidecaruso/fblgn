@@ -1,0 +1,12 @@
+{
+    "name": "davidecaruso/fblgn",
+    "authors": [
+        {
+            "name": "Davide Caruso",
+            "email": "davide.caruso93@gmail.com"
+        }
+    ],
+    "require": {
+        "facebook/php-sdk-v4": "~5.0@dev"
+    }
+}
