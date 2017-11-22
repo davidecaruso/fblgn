@@ -24,15 +24,19 @@ class FacebookHelper
         $this->helper = $this->facebook->getRedirectLoginHelper();
     }
 
-    public function getAccessToken(): string
+    public function getAccessToken()
     {
-        // Get previous access token
-        $accessToken = $_SESSION['access_token'] ?? null;
+        $accessToken = null;
 
         // If is empty request a new access token
-        if (!$accessToken) {
+        if (!isset($_SESSION['access_token']) || empty($_SESSION['access_token'])) {
             try {
+                // Short lived
                 $accessToken = (string) $this->helper->getAccessToken();
+                // Long lived
+                $oac = $this->facebook->getOAuth2Client();
+                $accessToken = (string) $oac->getLongLivedAccessToken($accessToken);
+                // Store into session
                 $_SESSION['access_token'] = $accessToken;
             } catch (FacebookSDKException $e) {
                 echo $e->getMessage();
@@ -44,7 +48,15 @@ class FacebookHelper
                 }
                 die(1);
             }
+        } else {
+            $accessToken = $_SESSION['access_token'];
         }
+
+        // Set default access token
+        if ($accessToken) {
+            $this->facebook->setDefaultAccessToken($accessToken);
+        }
+
         return $accessToken;
     }
 
@@ -56,7 +68,7 @@ class FacebookHelper
             $response = $this->facebook->get($endpoint);
             echo '<pre>', var_dump($response, true); die();
         } else {
-            $this->printLoginUrl();
+            $this->login();
         }
     }
 
@@ -72,10 +84,10 @@ class FacebookHelper
         return "/{$appId}/{$requestPath}/?" . http_build_query($query);
     }
 
-    public function printLoginUrl()
+    public function login()
     {
         $loginUrl = $this->helper->getLoginUrl($this->options['redirect_url'], $this->options['scope']);
-        print "<a href=\"{$loginUrl}\">Log in with Facebook</a>";
+        header("Location: {$loginUrl}");
         die(0);
     }
 }

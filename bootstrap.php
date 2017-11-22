@@ -11,7 +11,7 @@ define('VENDOR', ROOT . '/vendor');
 spl_autoload_register(
     function ($class) {
         $class = str_replace('\\', '/', $class);
-        require_once APP . "/$class.php";
+        include_once APP . "/{$class}.php";
     }
 );
 
