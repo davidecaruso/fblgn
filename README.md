@@ -1,4 +1,4 @@
-# fblg
+# fblgn
 
 Facebook PHP SDK v5 login example.
 
