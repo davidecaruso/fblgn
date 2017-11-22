@@ -5,6 +5,7 @@ namespace Core;
 use Config\FacebookConfig;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
+use Facebook\FacebookResponse;
 
 /**
  * Class FacebookHelper
@@ -84,19 +85,19 @@ class FacebookHelper
     /**
      * Send a GET request to Graph.
      *
-     * @return void
+     * @return null|\Facebook\FacebookResponse
      */
     public function sendRequest()
     {
+        $response = null;
         $accessToken = $this->getAccessToken();
         if (!empty($accessToken)) {
             $endpoint = $this->getEndpoint();
             $response = $this->facebook->get($endpoint);
-            echo '<pre>', var_dump($response, true);
-            die();
         } else {
             $this->login();
         }
+        return $response;
     }
 
     /**

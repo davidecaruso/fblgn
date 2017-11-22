@@ -14,4 +14,8 @@ $config = new FacebookConfig($parser);
 
 // Helper class
 $helper = new FacebookHelper($config);
-$helper->sendRequest();
+$response = $helper->sendRequest();
+
+
+echo '<pre>', var_dump($response, true);
+die();
