@@ -2,15 +2,15 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 use Config\FacebookConfig;
-use Config\Parser\Ini;
+use Parsers\IniConfigParser;
 use Core\FacebookHelper;
 
-// Ini formatter
-$formatter = new Ini(ROOT . '/config.ini');
+// Ini parser
+$parser = new IniConfigParser(ROOT . '/config.ini');
 
 // Facebook config
-$config = new FacebookConfig($formatter);
+$config = new FacebookConfig($parser);
 
 // Helper class
 $helper = new FacebookHelper($config);
-$helper->request();
+$helper->sendRequest();

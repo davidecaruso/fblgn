@@ -6,13 +6,29 @@ use Config\FacebookConfig;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 
+/**
+ * Class FacebookHelper
+ * PHP version 7.x
+ *
+ * @category  PHP
+ * @package   Core
+ * @author    Davide Caruso <davide.caruso93@gmail.com>
+ * @copyright 2017 Davide Caruso
+ * @license   https://github.com/davidecaruso/fblgn/blob/master/LICENSE MIT Licence
+ * @link      https://github.com/davidecaruso/fblgn
+ */
 class FacebookHelper
 {
-    private $config;
-    private $facebook;
-    private $helper;
-    private $options;
+    protected $config;
+    protected $facebook;
+    protected $helper;
+    protected $options;
 
+    /**
+     * FacebookHelper constructor.
+     *
+     * @param \Config\FacebookConfig $facebookConfig Facebook Config object
+     */
     public function __construct(FacebookConfig $facebookConfig)
     {
         // Load config
@@ -24,6 +40,11 @@ class FacebookHelper
         $this->helper = $this->facebook->getRedirectLoginHelper();
     }
 
+    /**
+     * Return a valid Access Token and set it into session
+     *
+     * @return null|string
+     */
     public function getAccessToken()
     {
         $accessToken = null;
@@ -60,18 +81,29 @@ class FacebookHelper
         return $accessToken;
     }
 
-    public function request()
+    /**
+     * Send a GET request to Graph.
+     *
+     * @return void
+     */
+    public function sendRequest()
     {
         $accessToken = $this->getAccessToken();
         if (!empty($accessToken)) {
             $endpoint = $this->getEndpoint();
             $response = $this->facebook->get($endpoint);
-            echo '<pre>', var_dump($response, true); die();
+            echo '<pre>', var_dump($response, true);
+            die();
         } else {
             $this->login();
         }
     }
 
+    /**
+     * Get the complete endpoint path for the request.
+     *
+     * @return string
+     */
     public function getEndpoint()
     {
         $appId = $this->config['app_id'];
@@ -84,9 +116,16 @@ class FacebookHelper
         return "/{$appId}/{$requestPath}/?" . http_build_query($query);
     }
 
+    /**
+     * Go to the login page.
+     *
+     * @return void
+     */
     public function login()
     {
-        $loginUrl = $this->helper->getLoginUrl($this->options['redirect_url'], $this->options['scope']);
+        $loginUrl = $this->helper->getLoginUrl(
+            $this->options['redirect_url'], $this->options['scope']
+        );
         header("Location: {$loginUrl}");
         die(0);
     }
