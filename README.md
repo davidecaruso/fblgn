@@ -23,12 +23,7 @@ metrics[] = FB_AD_NETWORK_IMP
 To test it run `php -S localhost:8080 -t public` and then click [here](http://localhost:8080).
 
 ## Author
-
-[Davide Caruso][linkedin]
+[Davide Caruso](https://davidecaruso.github.io)
 
 ## License
-
-Licensed under [MIT][mit].
-
-[linkedin]: https://it.linkedin.com/in/davidecaruso93
-[mit]: https://opensource.org/licenses/mit-license.php
+Licensed under [MIT](https://opensource.org/licenses/mit-license.php).
